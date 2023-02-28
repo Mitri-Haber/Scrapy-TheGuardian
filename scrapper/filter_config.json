@@ -1,0 +1,24 @@
+{   
+    "start" :{
+        "start_urls" : ["https://www.theguardian.com/international"]
+    },
+    
+    "parse": {
+        "pages_from_menu_filter": "//*[@data-section-name='News']//*[contains(concat( ' ', @class, ' ' ), concat( ' ', 'menu-item__title', ' ' ))]/@href"
+    },
+
+    "parse_page": {
+        "article_url_selector": "//*[contains(@class,'fc-item__link')]//@href",
+        "next_page_selector": "//*[contains(@class,'pagination__action--static') and contains(@rel,'next')]//@href"
+    },
+
+    "parse_article":{
+        "content_text_selector" : ["//p//text()"],
+        "author_selector" : ["//*[contains(@rel,'author')]//text()", 
+                            "//*[contains(concat( ' ', @class, ' ' ), concat( ' ', 'dcr-ub3a78', ' ' ))]//text()",
+                            "//*[contains(concat( ' ', @class, ' ' ), concat( ' ', 'dcr-172h0f2', ' ' ))]//text()",
+                            "//*[contains(concat( ' ', @class, ' ' ), concat( ' ', 'dcr-157qqfl', ' ' ))]//text()",
+                            "//*[contains(concat( ' ', @class, ' ' ), concat( ' ', 'dcr-14uwc2w', ' ' ))]//text()",
+                            "//*[contains(concat( ' ', @class, ' ' ), concat( ' ', 'dcr-1yuw4ky', ' ' ))]//text()"]
+    }
+}

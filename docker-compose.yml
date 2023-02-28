@@ -1,0 +1,45 @@
+---
+version: "3"
+
+services:
+  scrapper:
+    build: scrapper
+    container_name: TheguardianScrapper
+    restart: unless-stopped
+    env_file: .env
+    environment:
+        - DB_URL=${DB_URL}
+        - DB_NAME=${DB_NAME}
+        
+  api:
+    build: rest-api
+    container_name: api
+    restart: unless-stopped
+    env_file: .env
+    environment:
+        - DB_URL=${DB_URL}
+        - DB_NAME=${DB_NAME}
+    # expose fastapi port only inside docker network and not machine network layer, will be intercepted by nginx
+    expose:
+      - 8080
+    networks:
+      - api_network
+
+  nginx:
+    build: ./nginx
+    container_name: fastapi-nginx
+    volumes:
+      - logs:/home/app/fast-api-proxy/logs/
+    # bind nginx port (81) from container to machine port 8080, which will intercept calls on port 8080
+    ports:
+      - 8080:81
+    depends_on:
+      - api
+    networks:
+      - api_network
+
+networks:
+  api_network:
+    driver: bridge
+volumes:
+  logs:
